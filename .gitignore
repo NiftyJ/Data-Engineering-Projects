@@ -17,6 +17,3 @@ obj/Debug/
 Thumbs.db
 Desktop.ini
 .DS_Store
-
-# Tooling
-.claude/
