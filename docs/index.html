@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Leonard Clarque</title>
+<meta name="description" content="Interactive resume generated from GitHub repositories — dimensional modelling, SQL pipelines, semantic models and BI reporting.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper: #F4F6F9;
+    --card: #FFFFFF;
+    --ink: #16202E;
+    --muted: #5A6678;
+    --line: #D8DEE9;
+    --accent: #2749D6;
+    --accent-soft: #E4E9FB;
+    --accent-ink: #1D3AAE;
+    --edge: #B9C2D4;
+    --shadow: 0 1px 2px rgba(22, 32, 46, 0.06), 0 8px 24px rgba(22, 32, 46, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0C111D;
+      --card: #131A29;
+      --ink: #E6EAF2;
+      --muted: #8B95A7;
+      --line: #232C3D;
+      --accent: #8FA5FF;
+      --accent-soft: #1B2440;
+      --accent-ink: #AFBEFF;
+      --edge: #37425A;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0C111D;
+    --card: #131A29;
+    --ink: #E6EAF2;
+    --muted: #8B95A7;
+    --line: #232C3D;
+    --accent: #8FA5FF;
+    --accent-soft: #1B2440;
+    --accent-ink: #AFBEFF;
+    --edge: #37425A;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  .mono { font-family: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- header ---------- */
+  header.site {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-inner {
+    display: flex; align-items: center; gap: 24px;
+    padding: 14px 0;
+  }
+  .logo {
+    font-family: "IBM Plex Mono", monospace;
+    font-weight: 600; font-size: 15px;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .logo em { color: var(--accent); font-style: normal; }
+  nav.top { display: flex; gap: 20px; margin-left: auto; }
+  nav.top a {
+    color: var(--muted);
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  nav.top a:hover { color: var(--ink); text-decoration: none; }
+  .theme-btn {
+    background: none; border: 1px solid var(--line); border-radius: 6px;
+    color: var(--muted); cursor: pointer;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    padding: 5px 10px;
+  }
+  .theme-btn:hover { color: var(--ink); border-color: var(--edge); }
+
+  /* ---------- hero ---------- */
+  .hero { padding: 72px 0 48px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px; color: var(--accent);
+    letter-spacing: 0.04em;
+    margin: 0 0 20px;
+  }
+  h1 {
+    font-family: "Archivo Black", "Archivo", sans-serif;
+    font-weight: 400;
+    font-size: clamp(34px, 6vw, 62px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin: 0 0 22px;
+    max-width: 17ch;
+    text-wrap: balance;
+  }
+  h1 .accent { color: var(--accent); }
+  .hero p.lede {
+    max-width: 60ch; color: var(--muted);
+    font-size: 17px; margin: 0 0 36px;
+  }
+  .hero p.lede strong { color: var(--ink); font-weight: 600; }
+  .stat-strip {
+    display: flex; flex-wrap: wrap; gap: 0;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: var(--card); box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .stat {
+    flex: 1 1 130px;
+    padding: 16px 20px;
+    border-right: 1px solid var(--line);
+  }
+  .stat:last-child { border-right: none; }
+  .stat .num {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 26px; font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .stat .lbl {
+    font-size: 12px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  /* ---------- sections ---------- */
+  section { padding: 56px 0; }
+  .sec-head { margin-bottom: 28px; }
+  .sec-head .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px; color: var(--accent);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin: 0 0 8px;
+  }
+  h2 {
+    font-family: "Archivo Black", "Archivo", sans-serif;
+    font-weight: 400;
+    font-size: clamp(24px, 3.4vw, 34px);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .sec-head p { color: var(--muted); max-width: 62ch; margin: 0; }
+
+  /* ---------- schema explorer ---------- */
+  .schema-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1.9fr) minmax(260px, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+  @media (max-width: 860px) {
+    .schema-shell { grid-template-columns: 1fr; }
+  }
+  .schema-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 10px;
+    overflow-x: auto;
+  }
+  .schema-card svg { display: block; min-width: 620px; width: 100%; height: auto; }
+
+  .node { cursor: pointer; }
+  .node rect {
+    fill: var(--paper);
+    stroke: var(--edge);
+    stroke-width: 1.2;
+    transition: fill 0.15s, stroke 0.15s;
+  }
+  .node text {
+    font-family: "IBM Plex Mono", monospace;
+    fill: var(--muted);
+    transition: fill 0.15s;
+    pointer-events: none;
+  }
+  .node.fact rect { stroke-width: 1.6; }
+  .node.fact text { font-weight: 600; }
+  .node.lit rect { fill: var(--accent-soft); stroke: var(--accent); }
+  .node.lit text { fill: var(--accent-ink); }
+  .node.active rect { fill: var(--accent); stroke: var(--accent); }
+  .node.active text { fill: var(--card); }
+  .edge-line {
+    stroke: var(--line); stroke-width: 1.2; fill: none;
+    transition: stroke 0.15s, stroke-width 0.15s;
+  }
+  .edge-line.lit { stroke: var(--accent); stroke-width: 2; }
+
+  .schema-panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 22px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .schema-panel .pname {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 16px; font-weight: 600;
+    color: var(--accent-ink);
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .schema-panel .ptype {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--muted); margin: 0 0 -8px;
+  }
+  .schema-panel .grain {
+    margin: 0; color: var(--ink); font-size: 15px;
+  }
+  .schema-panel h4 {
+    margin: 6px 0 0;
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .join-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  .join-list li {
+    font-family: "IBM Plex Mono", monospace; font-size: 13px;
+    color: var(--ink);
+    display: flex; justify-content: space-between; gap: 12px;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 6px;
+  }
+  .join-list li:last-child { border-bottom: none; }
+  .join-list .role { color: var(--muted); font-size: 12px; text-align: right; }
+  .measures {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12.5px; line-height: 1.7;
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: pre;
+    margin: 0;
+  }
+  .measures .kw { color: var(--accent); }
+  .schema-note { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+
+  /* ---------- repos ---------- */
+  .repo-controls {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin-bottom: 20px;
+  }
+  .chip {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 999px; padding: 5px 14px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px;
+    color: var(--muted); cursor: pointer;
+  }
+  .chip:hover { border-color: var(--edge); color: var(--ink); }
+  .chip.on {
+    background: var(--accent); border-color: var(--accent);
+    color: var(--card); font-weight: 500;
+  }
+  .repo-controls select {
+    margin-left: auto;
+    background: var(--card); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 6px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12.5px;
+    padding: 6px 10px;
+  }
+  .repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 16px;
+  }
+  .repo-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color 0.15s, transform 0.15s;
+  }
+  .repo-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .repo-card .rname {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 15px; font-weight: 600;
+    margin: 0; overflow-wrap: anywhere;
+  }
+  .repo-card .rname a { color: var(--ink); }
+  .repo-card .rname a:hover { color: var(--accent); text-decoration: none; }
+  .repo-card .rdesc { margin: 0; font-size: 14px; color: var(--muted); flex: 1; }
+  .repo-card .rmeta {
+    display: flex; flex-wrap: wrap; gap: 14px; align-items: center;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px;
+    color: var(--muted);
+  }
+  .lang-dot {
+    display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+    background: var(--accent); margin-right: 6px;
+    vertical-align: 0;
+  }
+  .rtopics { display: flex; flex-wrap: wrap; gap: 6px; }
+  .rtopics span {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    background: var(--accent-soft); color: var(--accent-ink);
+    border-radius: 4px; padding: 2px 7px;
+  }
+  .repo-status { font-size: 13px; color: var(--muted); margin: 14px 0 0; }
+
+  /* ---------- stack ---------- */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .stack-col {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; box-shadow: var(--shadow);
+    padding: 20px;
+  }
+  .stack-col h3 {
+    margin: 0 0 12px;
+    font-size: 12px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+  .stack-col ul { list-style: none; margin: 0; padding: 0; }
+  .stack-col li {
+    font-family: "IBM Plex Mono", monospace; font-size: 13.5px;
+    padding: 6px 0; border-bottom: 1px dashed var(--line);
+    color: var(--ink);
+  }
+  .stack-col li:last-child { border-bottom: none; }
+
+  /* ---------- footer ---------- */
+  footer.site {
+    border-top: 1px solid var(--line);
+    padding: 40px 0 56px;
+    margin-top: 24px;
+  }
+  .foot-inner { display: flex; flex-wrap: wrap; gap: 24px; align-items: baseline; }
+  .foot-inner .fname { font-family: "Archivo Black", "Archivo", sans-serif; font-size: 18px; }
+  .foot-links { display: flex; gap: 20px; margin-left: auto; }
+  .foot-links a { font-family: "IBM Plex Mono", monospace; font-size: 13px; }
+  .foot-note { margin: 16px 0 0; font-size: 12.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap site-inner">
+    <span class="logo">leonard<em>.</em>clarque</span>
+    <nav class="top" aria-label="Sections">
+      <a href="#schema">Schema</a>
+      <a href="#repos">Repositories</a>
+      <a href="#stack">Stack</a>
+    </nav>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle color theme">theme</button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <p class="eyebrow">SELECT * FROM leonard.projects ORDER BY updated_at DESC;</p>
+    <h1>Data engineer. I turn OLTP sprawl into <span class="accent">star schemas</span>.</h1>
+    <p class="lede">
+      This page is my resume, generated from my GitHub repositories — the project cards below are
+      fetched live from the API. The centerpiece is a <strong>Kimball-style dimensional warehouse</strong>
+      built on the AdventureWorks OLTP database: SQL Server star schema, SSAS tabular model, and a
+      Power BI report on top. Click around the schema to explore it.
+    </p>
+    <div class="stat-strip" role="list" aria-label="Warehouse statistics">
+      <div class="stat" role="listitem"><div class="num" data-count="8">8</div><div class="lbl">Dimensions</div></div>
+      <div class="stat" role="listitem"><div class="num" data-count="4">4</div><div class="lbl">Fact tables</div></div>
+      <div class="stat" role="listitem"><div class="num" data-count="20">20</div><div class="lbl">Foreign keys</div></div>
+      <div class="stat" role="listitem"><div class="num" data-count="14">14</div><div class="lbl">Model relationships</div></div>
+      <div class="stat" role="listitem"><div class="num" id="repoStat">—</div><div class="lbl">Public repos</div></div>
+    </div>
+  </div>
+
+  <section id="schema">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Featured build · adventure-works</p>
+        <h2>The warehouse, as a clickable star schema</h2>
+        <p>
+          Every relationship below exists as a real foreign key in <span class="mono">AdventureWorksDW_Custom</span>,
+          rebuilt and orphan-validated by script. Click a fact table to see its grain and conformed
+          dimensions, or click a dimension to see which facts reference it.
+        </p>
+      </div>
+      <div class="schema-shell">
+        <div class="schema-card">
+          <svg id="schemaSvg" viewBox="0 0 960 640" role="img" aria-label="Star schema diagram: four fact tables joined to eight dimensions"></svg>
+        </div>
+        <aside class="schema-panel" id="schemaPanel" aria-live="polite"></aside>
+      </div>
+      <p class="schema-note">
+        <span class="mono">DimDate</span> is role-playing — order, due, ship and work-order start dates all
+        resolve to the same <span class="mono">YYYYMMDD</span> integer key. Full DDL, FK rebuild and validation
+        scripts live in
+        <a href="https://github.com/NiftyJ/Data-Engineering-Projects/tree/main/adventure-works" rel="noopener">the repository</a>.
+      </p>
+    </div>
+  </section>
+
+  <section id="repos">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Live from api.github.com</p>
+        <h2>Repositories</h2>
+        <p>Fetched from my GitHub profile on page load, so this section stays current as new projects land.</p>
+      </div>
+      <div class="repo-controls" id="repoControls"></div>
+      <div class="repo-grid" id="repoGrid"></div>
+      <p class="repo-status" id="repoStatus"></p>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="kicker">Working set</p>
+        <h2>Stack</h2>
+      </div>
+      <div class="stack-grid">
+        <div class="stack-col">
+          <h3>Warehousing</h3>
+          <ul>
+            <li>SQL Server</li>
+            <li>T-SQL DDL &amp; constraints</li>
+            <li>Kimball dimensional modelling</li>
+            <li>Orphan / FK validation</li>
+          </ul>
+        </div>
+        <div class="stack-col">
+          <h3>Semantic layer</h3>
+          <ul>
+            <li>SSAS tabular (1200)</li>
+            <li>DAX measures</li>
+            <li>Role-playing dimensions</li>
+            <li>Visual Studio SSDT</li>
+          </ul>
+        </div>
+        <div class="stack-col">
+          <h3>Reporting</h3>
+          <ul>
+            <li>Power BI Desktop</li>
+            <li>Report modelling</li>
+            <li>SSMS database diagrams</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-inner">
+      <span class="fname">Leonard Clarque</span>
+      <div class="foot-links">
+        <a href="https://github.com/NiftyJ" rel="noopener">github.com/NiftyJ</a>
+        <a href="mailto:leonardclarque@gmail.com">leonardclarque@gmail.com</a>
+      </div>
+    </div>
+    <p class="foot-note">Built as a static page — repository data is read client-side from the public GitHub API.</p>
+  </div>
+</footer>
+
+<script>
+  "use strict";
+
+  /* ======== config — edit these to reuse the page ======== */
+  var CONFIG = {
+    githubUser: "NiftyJ",
+    maxRepos: 100
+  };
+
+  /* ======== theme ======== */
+  (function () {
+    var btn = document.getElementById("themeBtn");
+    var stored = null;
+    try { stored = localStorage.getItem("theme"); } catch (e) {}
+    if (stored === "dark" || stored === "light") {
+      document.documentElement.setAttribute("data-theme", stored);
+    }
+    btn.addEventListener("click", function () {
+      var cur = document.documentElement.getAttribute("data-theme");
+      if (!cur) {
+        cur = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      var next = cur === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+    });
+  })();
+
+  /* ======== star schema explorer ======== */
+  var DIMS = {
+    DimDate:           { x: 0.50, y: 0.050 },
+    DimEmployee:       { x: 0.855, y: 0.115 },
+    DimVendor:         { x: 0.955, y: 0.46 },
+    DimShipMethod:     { x: 0.855, y: 0.815 },
+    DimProduct:        { x: 0.50, y: 0.935 },
+    DimLocation:       { x: 0.145, y: 0.815 },
+    DimSalesTerritory: { x: 0.045, y: 0.46 },
+    DimCustomer:       { x: 0.145, y: 0.115 }
+  };
+
+  var FACTS = [
+    {
+      id: "FactSalesOrder", x: 0.335, y: 0.335,
+      grain: "One row per sales order header.",
+      joins: [
+        { dim: "DimCustomer", role: "" },
+        { dim: "DimSalesTerritory", role: "" },
+        { dim: "DimEmployee", role: "salesperson" },
+        { dim: "DimDate", role: "order · due · ship" }
+      ]
+    },
+    {
+      id: "FactSalesDetail", x: 0.665, y: 0.335,
+      grain: "One row per sales order line.",
+      joins: [
+        { dim: "DimProduct", role: "" },
+        { dim: "DimCustomer", role: "" },
+        { dim: "DimSalesTerritory", role: "" },
+        { dim: "DimDate", role: "order" }
+      ],
+      measures: [
+        ["Total Sales", "SUM(FactSalesDetail[LineTotal])"],
+        ["Total Orders", "DISTINCTCOUNT(FactSalesDetail[SalesOrderNumber])"],
+        ["Avg Unit Price", "AVERAGE(FactSalesDetail[UnitPrice])"]
+      ]
+    },
+    {
+      id: "FactPurchaseOrderDetail", x: 0.665, y: 0.645,
+      grain: "One row per purchase order line.",
+      joins: [
+        { dim: "DimProduct", role: "" },
+        { dim: "DimVendor", role: "" },
+        { dim: "DimEmployee", role: "buyer" },
+        { dim: "DimShipMethod", role: "" },
+        { dim: "DimDate", role: "order · ship" }
+      ]
+    },
+    {
+      id: "FactManufacturingCost", x: 0.335, y: 0.645,
+      grain: "One row per work order.",
+      joins: [
+        { dim: "DimProduct", role: "" },
+        { dim: "DimLocation", role: "" },
+        { dim: "DimDate", role: "scheduled · actual start" }
+      ]
+    }
+  ];
+
+  var SVG_NS = "http://www.w3.org/2000/svg";
+  var VW = 960, VH = 640;
+  var FACT_W = 208, FACT_H = 54, DIM_W = 158, DIM_H = 42;
+
+  function px(n) { return { x: n.x * VW, y: n.y * VH }; }
+
+  function makeNode(tag, attrs) {
+    var el = document.createElementNS(SVG_NS, tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  function buildSchema() {
+    var svg = document.getElementById("schemaSvg");
+    var edgeGroup = makeNode("g", {});
+    var nodeGroup = makeNode("g", {});
+    svg.appendChild(edgeGroup);
+    svg.appendChild(nodeGroup);
+
+    var edges = [];   // { fact, dim, el }
+    var nodeEls = {}; // id -> <g>
+
+    FACTS.forEach(function (f) {
+      var fp = px(f);
+      f.joins.forEach(function (j) {
+        var dp = px(DIMS[j.dim]);
+        var mx = (fp.x + dp.x) / 2, my = (fp.y + dp.y) / 2;
+        // bow the midpoint slightly away from center so parallel edges separate
+        var cx = mx + (mx - VW / 2) * 0.12;
+        var cy = my + (my - VH / 2) * 0.12;
+        var path = makeNode("path", {
+          d: "M " + fp.x + " " + fp.y + " Q " + cx + " " + cy + " " + dp.x + " " + dp.y,
+          "class": "edge-line"
+        });
+        edgeGroup.appendChild(path);
+        edges.push({ fact: f.id, dim: j.dim, el: path });
+      });
+    });
+
+    function addBox(id, cx, cy, w, h, isFact) {
+      var g = makeNode("g", {
+        "class": "node" + (isFact ? " fact" : " dim"),
+        tabindex: "0", role: "button",
+        "aria-label": (isFact ? "Fact table " : "Dimension ") + id
+      });
+      g.appendChild(makeNode("rect", { x: cx - w / 2, y: cy - h / 2, width: w, height: h, rx: 8 }));
+      var t = makeNode("text", {
+        x: cx, y: cy + 4.5, "text-anchor": "middle",
+        "font-size": isFact ? 14.5 : 12.5
+      });
+      t.textContent = id;
+      g.appendChild(t);
+      nodeGroup.appendChild(g);
+      nodeEls[id] = g;
+      g.addEventListener("click", function () { select(id); });
+      g.addEventListener("keydown", function (ev) {
+        if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(id); }
+      });
+      return g;
+    }
+
+    Object.keys(DIMS).forEach(function (d) {
+      var p = px(DIMS[d]);
+      addBox(d, p.x, p.y, DIM_W, DIM_H, false);
+    });
+    FACTS.forEach(function (f) {
+      var p = px(f);
+      addBox(f.id, p.x, p.y, FACT_W, FACT_H, true);
+    });
+
+    var panel = document.getElementById("schemaPanel");
+
+    function esc(s) {
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function select(id) {
+      var fact = null;
+      for (var i = 0; i < FACTS.length; i++) if (FACTS[i].id === id) fact = FACTS[i];
+      var isFact = !!fact;
+
+      Object.keys(nodeEls).forEach(function (k) {
+        nodeEls[k].classList.remove("active", "lit");
+      });
+      nodeEls[id].classList.add("active");
+
+      edges.forEach(function (e) {
+        var lit = isFact ? e.fact === id : e.dim === id;
+        e.el.classList.toggle("lit", lit);
+        if (lit) nodeEls[isFact ? e.dim : e.fact].classList.add("lit");
+      });
+
+      var html;
+      if (isFact) {
+        html = '<p class="ptype">Fact table</p>' +
+          '<p class="pname">' + esc(fact.id) + "</p>" +
+          '<p class="grain">' + esc(fact.grain) + "</p>" +
+          "<h4>Joins to</h4><ul class=\"join-list\">";
+        fact.joins.forEach(function (j) {
+          html += "<li><span>" + esc(j.dim) + "</span>" +
+            (j.role ? '<span class="role">' + esc(j.role) + "</span>" : "") + "</li>";
+        });
+        html += "</ul>";
+        if (fact.measures) {
+          html += "<h4>DAX measures</h4><pre class=\"measures\">";
+          fact.measures.forEach(function (m) {
+            html += esc(m[0]) + ' = <span class="kw">' + esc(m[1]) + "</span>\n";
+          });
+          html += "</pre>";
+        }
+      } else {
+        var refs = [];
+        edges.forEach(function (e) { if (e.dim === id && refs.indexOf(e.fact) < 0) refs.push(e.fact); });
+        html = '<p class="ptype">Dimension</p>' +
+          '<p class="pname">' + esc(id) + "</p>" +
+          '<p class="grain">Conformed dimension referenced by ' + refs.length +
+          (refs.length === 1 ? " fact table." : " fact tables.") + "</p>" +
+          "<h4>Referenced by</h4><ul class=\"join-list\">";
+        refs.forEach(function (r) { html += "<li><span>" + esc(r) + "</span></li>"; });
+        html += "</ul>";
+        if (id === "DimDate") {
+          html += '<p class="grain" style="font-size:13.5px;color:var(--muted)">Role-playing: order, due, ship and ' +
+            'work-order start dates all reference <span class="mono">DateKey</span> (YYYYMMDD integer).</p>';
+        }
+      }
+      panel.innerHTML = html;
+    }
+
+    select("FactSalesDetail");
+  }
+  buildSchema();
+
+  /* ======== repositories (live + fallback) ======== */
+  var FALLBACK_REPOS = [
+    {
+      name: "Data-Engineering-Projects",
+      html_url: "https://github.com/NiftyJ/Data-Engineering-Projects",
+      description: "Dimensional modelling, SQL pipelines, semantic models and BI reporting — including a Kimball-style AdventureWorks warehouse with SSAS tabular model and Power BI report.",
+      language: "TSQL",
+      stargazers_count: 0,
+      topics: ["sql-server", "ssas", "power-bi", "dax", "kimball"],
+      updated_at: "2026-08-24T00:00:00Z"
+    }
+  ];
+
+  var repoState = { repos: [], lang: "all", sort: "updated", live: false };
+
+  function relTime(iso) {
+    var s = (Date.now() - new Date(iso).getTime()) / 1000;
+    if (!isFinite(s) || s < 0) return "";
+    var units = [[31536000, "y"], [2592000, "mo"], [604800, "w"], [86400, "d"], [3600, "h"], [60, "m"]];
+    for (var i = 0; i < units.length; i++) {
+      if (s >= units[i][0]) return Math.floor(s / units[i][0]) + units[i][1] + " ago";
+    }
+    return "just now";
+  }
+
+  function escText(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function renderControls() {
+    var langs = [];
+    repoState.repos.forEach(function (r) {
+      if (r.language && langs.indexOf(r.language) < 0) langs.push(r.language);
+    });
+    langs.sort();
+    var box = document.getElementById("repoControls");
+    var html = '<button type="button" class="chip' + (repoState.lang === "all" ? " on" : "") + '" data-lang="all">all</button>';
+    langs.forEach(function (l) {
+      html += '<button type="button" class="chip' + (repoState.lang === l ? " on" : "") + '" data-lang="' + escText(l) + '">' + escText(l) + "</button>";
+    });
+    html += '<select id="repoSort" aria-label="Sort repositories">' +
+      '<option value="updated"' + (repoState.sort === "updated" ? " selected" : "") + ">sort: updated</option>" +
+      '<option value="stars"' + (repoState.sort === "stars" ? " selected" : "") + ">sort: stars</option>" +
+      '<option value="name"' + (repoState.sort === "name" ? " selected" : "") + ">sort: name</option>" +
+      "</select>";
+    box.innerHTML = html;
+
+    box.querySelectorAll(".chip").forEach(function (c) {
+      c.addEventListener("click", function () {
+        repoState.lang = c.getAttribute("data-lang");
+        renderControls(); renderRepos();
+      });
+    });
+    document.getElementById("repoSort").addEventListener("change", function (e) {
+      repoState.sort = e.target.value;
+      renderRepos();
+    });
+  }
+
+  function renderRepos() {
+    var list = repoState.repos.filter(function (r) {
+      return repoState.lang === "all" || r.language === repoState.lang;
+    });
+    list = list.slice().sort(function (a, b) {
+      if (repoState.sort === "stars") return (b.stargazers_count || 0) - (a.stargazers_count || 0);
+      if (repoState.sort === "name") return a.name.localeCompare(b.name);
+      return new Date(b.updated_at) - new Date(a.updated_at);
+    });
+    var html = "";
+    list.forEach(function (r) {
+      html += '<article class="repo-card">' +
+        '<h3 class="rname"><a href="' + escText(r.html_url) + '" rel="noopener">' + escText(r.name) + "</a></h3>" +
+        '<p class="rdesc">' + (r.description ? escText(r.description) : "<em>No description yet.</em>") + "</p>";
+      if (r.topics && r.topics.length) {
+        html += '<div class="rtopics">';
+        r.topics.slice(0, 5).forEach(function (t) { html += "<span>" + escText(t) + "</span>"; });
+        html += "</div>";
+      }
+      html += '<div class="rmeta">' +
+        (r.language ? '<span><span class="lang-dot"></span>' + escText(r.language) + "</span>" : "") +
+        '<span>&#9733; ' + (r.stargazers_count || 0) + "</span>" +
+        "<span>updated " + relTime(r.updated_at) + "</span>" +
+        "</div></article>";
+    });
+    document.getElementById("repoGrid").innerHTML =
+      html || '<p class="repo-status">No repositories match this filter.</p>';
+  }
+
+  function setRepos(repos, live) {
+    repoState.repos = repos;
+    repoState.live = live;
+    document.getElementById("repoStat").textContent = repos.length;
+    document.getElementById("repoStatus").textContent = live
+      ? "Live from the GitHub API · " + repos.length + " public repositories."
+      : "Live GitHub data is unavailable right now — showing a snapshot instead.";
+    renderControls();
+    renderRepos();
+  }
+
+  (function loadRepos() {
+    var url = "https://api.github.com/users/" + CONFIG.githubUser +
+      "/repos?per_page=" + CONFIG.maxRepos + "&sort=updated";
+    var timer = setTimeout(function () { if (!repoState.repos.length) setRepos(FALLBACK_REPOS, false); }, 6000);
+    fetch(url, { headers: { Accept: "application/vnd.github+json" } })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        clearTimeout(timer);
+        if (!Array.isArray(data) || !data.length) throw new Error("empty");
+        setRepos(data.filter(function (r) { return !r.fork; }), true);
+      })
+      .catch(function () {
+        clearTimeout(timer);
+        setRepos(FALLBACK_REPOS, false);
+      });
+  })();
+</script>
+</body>
+</html>
