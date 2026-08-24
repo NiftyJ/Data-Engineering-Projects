@@ -11,6 +11,16 @@ substantive repository (data & BI, trading & quant, ML & vision, reinforcement l
 deep-dive write-ups of the ML / deep-learning work. Live repository metadata is fetched from
 the GitHub API on load. No build step — one static HTML file.
 
+### Project card photos
+
+Each portfolio card can show a photograph instead of its generated artwork.
+Drop JPEGs into [`docs/img/`](docs/img/) using the filenames in
+[`docs/img/sources.txt`](docs/img/sources.txt), then set `photos: true` in the
+`CONFIG` block near the top of the script in `docs/index.html`. Cards with no
+image, or whose image fails to load, keep the generated artwork automatically,
+so a partial set works fine. `bash scripts/fetch-images.sh` downloads them in
+bulk once you have filled in the URLs.
+
 ### Hosting on Vercel (recommended)
 
 1. Go to [vercel.com/new](https://vercel.com/new) and import this repository.

@@ -272,8 +272,28 @@
     transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.25s, border-color 0.2s;
   }
   .repo-card:hover { transform: translateY(-4px); box-shadow: var(--glow); }
-  .card-sig { height: 92px; position: relative; border-bottom: 1px solid var(--line); overflow: hidden; }
-  .card-sig svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .card-sig { height: 140px; position: relative; border-bottom: 1px solid var(--line); overflow: hidden; background: var(--paper); }
+  .card-sig svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+  .sig-photo {
+    position: absolute; inset: 0; z-index: 1;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    filter: saturate(0.92) contrast(1.02);
+    transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .repo-card:hover .sig-photo { transform: scale(1.045); }
+  .card-sig.has-photo::after {
+    content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: linear-gradient(to bottom, transparent 45%, color-mix(in srgb, var(--card) 72%, transparent) 100%);
+  }
+  .photo-credit {
+    position: absolute; right: 7px; bottom: 5px; z-index: 3;
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px;
+    color: var(--muted); opacity: 0.75;
+    background: color-mix(in srgb, var(--card) 62%, transparent);
+    border-radius: 3px; padding: 1px 5px;
+  }
+  .photo-credit a { color: inherit; }
   .card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
   .rtop { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
   .rname { font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
@@ -778,7 +798,14 @@
 <script>
   "use strict";
 
-  var CONFIG = { githubUser: "NiftyJ", maxRepos: 100 };
+  var CONFIG = {
+    githubUser: "NiftyJ",
+    maxRepos: 100,
+    // Flip to true once docs/img/ holds the project photos (see docs/img/README.md).
+    // Each card then shows its photo; any image that is missing or fails to load
+    // falls back to the generated signature artwork automatically.
+    photos: false
+  };
   var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var SVG_NS = "http://www.w3.org/2000/svg";
 
@@ -1084,7 +1111,7 @@
   /* ================= card signature art ================= */
   function signature(name, area) {
     var rnd = mulberry32(hashStr(name));
-    var W = 320, H = 92;
+    var W = 320, H = 140;
     var col = "var(--a-" + area + ")";
     var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">';
     s += '<rect width="' + W + '" height="' + H + '" fill="' + col + '" opacity="0.07"></rect>';
@@ -1092,7 +1119,7 @@
     if (area === "de") {
       for (i = 0; i < 5; i++) {
         var bw = 34 + Math.floor(rnd() * 30), bh = 12 + Math.floor(rnd() * 8);
-        var bx = 14 + i * 62, by = 16 + Math.floor(rnd() * 46);
+        var bx = 14 + i * 62, by = 20 + Math.floor(rnd() * 92);
         s += '<rect x="' + bx + '" y="' + by + '" width="' + bw + '" height="' + bh + '" rx="3" fill="none" stroke="' + col + '" stroke-opacity="0.55"></rect>';
         for (k = 1; k < 3; k++) {
           s += '<line x1="' + bx + '" y1="' + (by + k * bh / 3) + '" x2="' + (bx + bw) + '" y2="' + (by + k * bh / 3) + '" stroke="' + col + '" stroke-opacity="0.22"></line>';
@@ -1162,63 +1189,83 @@
 
   var PORTFOLIO = [
     { name: "Data-Engineering-Projects", area: "de", url: "https://github.com/NiftyJ/Data-Engineering-Projects",
+      img: "data-engineering-projects.jpg", imgAlt: "Rows of servers in a data centre",
       blurb: "End-to-end BI build on the AdventureWorks OLTP database: an 8-dimension, 4-fact Kimball star schema in SQL Server with role-playing dates, scripted FK rebuild and orphan validation, an SSAS tabular model with DAX measures, and a Power BI report on top.",
       stack: ["T-SQL", "SSAS", "Power BI", "DAX"], highlight: "Explore the star schema ↓", featureLink: "#schema" },
     { name: "Webellian-Project", area: "de", url: "https://github.com/NiftyJ/Webellian-Project",
+      img: "webellian-project.jpg", imgAlt: "Retail store shelves stocked with product",
       blurb: "A complete retail-sales pipeline on SQL Server Express: deliberately dirty CSVs go in, a cleaned star-schema warehouse comes out via BULK INSERT and T-SQL, orchestrated by one PowerShell script, with insight queries and a Power BI report.",
       stack: ["T-SQL", "SQL Server", "Power BI", "PowerShell"] },
     { name: "Distributed-Systems", area: "de", url: "https://github.com/NiftyJ/Distributed-Systems",
+      img: "distributed-systems.jpg", imgAlt: "Dense network cabling in a server cluster",
       blurb: "Machine learning at Spark scale: a MovieLens recommender built on explicit schemas, window functions and cross-validated ALS, and multiclass sentiment classification of financial news with TF-IDF, bigram and Word2Vec pipelines plus a custom Spark Transformer.",
       stack: ["PySpark", "Spark SQL", "MLlib"] },
     { name: "smc_improvement_walkforward", area: "quant", url: "https://github.com/NiftyJ/smc_improvement_walkforward",
+      img: "smc-walkforward.jpg", imgAlt: "Candlestick price chart on a trading screen",
       blurb: "A Smart-Money-Concepts backtest built to be distrusted: dedicated leak tests guard the feature pipeline, a hard per-trade loss cap bounds the downside, and the strategy is judged on a strict walk-forward rather than an in-sample fit.",
       stack: ["Python", "pandas", "walk-forward"], highlight: "+121.4% over 6 months out-of-sample →", featureLink: "#results" },
     { name: "Quant-Project", area: "quant", isPrivate: true, url: "https://github.com/NiftyJ/Quant-Project",
+      img: "quant-project.jpg", imgAlt: "Multi-monitor quantitative trading desk",
       blurb: "Extreme risk-to-reward SMC system: rather than chasing win rate, the RL objective is asymmetric payoff capture — roughly 25% winners at 10–100R each. GNN and vision modules feed the state; MetaTrader 5 and Interactive Brokers handle data and execution.",
       stack: ["PyTorch", "RL", "GNN", "MT5", "IBKR"] },
     { name: "NiftyBot", area: "quant", url: "https://github.com/NiftyJ/NiftyBot",
+      img: "niftybot.jpg", imgAlt: "Abstract neural network of glowing nodes",
       blurb: "Hierarchical multi-agent trader: a multi-head CNN Strategist reads Daily/4H structure and commits to a bias; a PPO-LSTM Tactician finds 15-minute entries and is architecturally barred from trading against it.",
       stack: ["PyTorch", "PPO", "CNN", "IBKR"], highlight: "See the architecture →", featureLink: "#ml" },
     { name: "smc_bot", area: "quant", url: "https://github.com/NiftyJ/smc_bot",
+      img: "smc-bot.jpg", imgAlt: "Foreign exchange candlestick chart",
       blurb: "The rule-based original: a multi-timeframe SMC bot deriving D1 structural bias from swing pivots, gating entries on H4/H1/M30 alignment, with MetaTrader 5 and free-data loaders and offline 1-year backtests.",
       stack: ["Python", "MetaTrader 5"] },
     { name: "smc_bot-other-files", area: "quant", isPrivate: true, url: "https://github.com/NiftyJ/smc_bot-other-files",
+      img: "smc-bot-other-files.jpg", imgAlt: "Printed analytics reports and charts",
       blurb: "The smc_bot research bench: 5-year backtests, PnL and portfolio HTML reporting, audit reports, HistData loaders and single-trade inspection tooling.",
       stack: ["Python", "backtesting"] },
     { name: "Algotrading-MQL4", area: "quant", url: "https://github.com/NiftyJ/Algotrading-MQL4",
+      img: "algotrading-mql4.jpg", imgAlt: "Stock exchange ticker board",
       blurb: "Where the trading thread started: Moving-Average and Renko-mod expert advisors written in MQL4 for MetaTrader 4 — systematic FX execution with the emotion compiled out.",
       stack: ["MQL4", "MetaTrader 4"] },
     { name: "MetaTrader5_Python_AutomationBot--V.1.02", area: "quant", url: "https://github.com/D1N2O3B4/MetaTrader5_Python_AutomationBot--V.1.02",
+      img: "metatrader5-bot.jpg", imgAlt: "Laptop displaying live market charts",
       blurb: "Early MetaTrader 5 automation in Python: tick and rates streaming notebooks and a live trading script, from a first account.",
       stack: ["Python", "MetaTrader 5"] },
     { name: "Plant-Disease-Identification-Yolo", area: "ml", url: "https://github.com/NiftyJ/Plant-Disease-Identification-Yolo",
+      img: "plant-disease-yolo.jpg", imgAlt: "Close-up of a plant leaf showing disease lesions",
       blurb: "A controlled answer to “does attention generalize?”: SE, ECA, CBAM and Coordinate Attention grafted onto YOLOv8 at one fixed insertion point, trained across four harmonized datasets and evaluated strictly cross-dataset with Wilcoxon and Benjamini–Hochberg testing.",
       stack: ["YOLOv8", "PyTorch", "Ultralytics"], highlight: "60 training runs · 240 transfer evals →", featureLink: "#ml" },
     { name: "Plant-Disease-Detection-ResNet-50-CNN", area: "ml", url: "https://github.com/NiftyJ/Plant-Disease-Detection-ResNet-50-CNN",
+      img: "plant-disease-resnet.jpg", imgAlt: "Macro photograph of a green plant leaf",
       blurb: "The first pass at the plant-disease problem: a ResNet-50 CNN image classifier — the baseline the later YOLO generalization study grew out of.",
       stack: ["ResNet-50", "CNN"] },
     { name: "Graphormer", area: "ml", url: "https://github.com/NiftyJ/Graphormer",
+      img: "graphormer.jpg", imgAlt: "Abstract graph of connected nodes and edges",
       blurb: "Working through graph transformers by implementation: a GTConv graph-transformer convolution experiment notebook.",
       stack: ["Graph transformers"] },
     { name: "Graph-Neural-Networks", area: "ml", url: "https://github.com/NiftyJ/Graph-Neural-Networks",
+      img: "graph-neural-networks.jpg", imgAlt: "Network of glowing light trails",
       blurb: "Graph neural network experiments — message passing and graph learning fundamentals, notebook-first.",
       stack: ["GNN"] },
     { name: "ML-Regression-on-Experimental-Data", area: "ml", url: "https://github.com/NiftyJ/ML-Regression-on-Experimental-Data",
+      img: "ml-regression.jpg", imgAlt: "Laboratory measurement instruments",
       blurb: "Linear and polynomial regression on real experimental measurements with scikit-learn and matplotlib — bias-variance trade-offs on data that does not cooperate.",
       stack: ["scikit-learn", "matplotlib"] },
     { name: "Hierarchical-RL-", area: "rl", url: "https://github.com/NiftyJ/Hierarchical-RL-",
+      img: "hierarchical-rl.jpg", imgAlt: "Layered geometric architecture seen from below",
       blurb: "The clean-room core of the hierarchical trading work: a custom environment and PyTorch model stack built on gated residual networks — the variable-selection layers used in modern time-series transformers.",
       stack: ["PyTorch", "HRL"] },
     { name: "DQN", area: "rl", isPrivate: true, url: "https://github.com/NiftyJ/DQN",
+      img: "dqn.jpg", imgAlt: "Retro arcade cabinets lit in a dark room",
       blurb: "Deep Q-Network for Atari built out properly: experience replay, subprocess-vectorized environments, gym wrappers, and observe/play tooling — infrastructure, not just the algorithm.",
       stack: ["PyTorch", "Atari", "gym"] },
     { name: "RLprojects", area: "rl", url: "https://github.com/NiftyJ/RLprojects",
+      img: "rlprojects.jpg", imgAlt: "Stock market screens showing price movement",
       blurb: "Reinforcement learning meets market simulation: gym-mtsim experiments including a custom GameStop trading environment.",
       stack: ["gym-mtsim", "RL"] },
     { name: "RL-Lab", area: "rl", isPrivate: true, url: "https://github.com/NiftyJ/RL-Lab",
+      img: "rl-lab.jpg", imgAlt: "Clean laboratory workbench",
       blurb: "Environment-design sandbox: a custom environment and its tests, kept small on purpose.",
       stack: ["Python"] },
     { name: "GrebNevRL", area: "rl", isPrivate: true, url: "https://github.com/NiftyJ/GrebNevRL",
+      img: "grebnevrl.jpg", imgAlt: "Abstract geometric pattern in motion",
       blurb: "A collection of reinforcement-learning projects.",
       stack: ["RL"] }
   ];
@@ -1256,7 +1303,13 @@
     list.forEach(function (p) {
       var live = p.live;
       html += '<article class="repo-card c-' + p.area + '">' +
-        '<div class="card-sig">' + signature(p.name, p.area) + "</div>" +
+        '<div class="card-sig' + (CONFIG.photos && p.img ? " has-photo" : "") + '">' + signature(p.name, p.area) +
+        (CONFIG.photos && p.img
+          ? '<img class="sig-photo" src="img/' + esc(p.img) + '" alt="' + esc(p.imgAlt || p.name) +
+            '" loading="lazy" decoding="async" width="320" height="140">' +
+            (p.imgCredit ? '<span class="photo-credit">' + esc(p.imgCredit) + "</span>" : "")
+          : "") +
+        "</div>" +
         '<div class="card-body">' +
         '<div class="rtop">' +
         '<h3 class="rname"><a href="' + esc(p.url) + '" rel="noopener">' + esc(p.name) + "</a></h3>" +
@@ -1281,7 +1334,20 @@
       if (meta.length) html += '<div class="rmeta">' + meta.join("") + "</div>";
       html += "</div></article>";
     });
-    document.getElementById("repoGrid").innerHTML = html || '<p class="repo-status">No repositories in this area.</p>';
+    var grid = document.getElementById("repoGrid");
+    grid.innerHTML = html || '<p class="repo-status">No repositories in this area.</p>';
+    // If an image is missing or fails to load, fall back to the generated signature art.
+    grid.querySelectorAll(".sig-photo").forEach(function (im) {
+      im.addEventListener("error", function () {
+        var band = im.closest(".card-sig");
+        if (band) {
+          band.classList.remove("has-photo");
+          var cr = band.querySelector(".photo-credit");
+          if (cr) cr.remove();
+        }
+        im.remove();
+      });
+    });
   }
 
   function renderExtras() {

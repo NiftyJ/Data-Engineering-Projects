@@ -1,0 +1,69 @@
+# Project card photos — one line per repository.
+#
+# Format:   <filename><TAB><direct image URL>
+# Lines starting with # are ignored, so a line with no URL yet is simply skipped.
+#
+# Paste a DIRECT image URL (one that ends in .jpg/.png/.webp, or an Unsplash
+# images.unsplash.com/... link). Then run:  bash scripts/fetch-images.sh
+#
+# Suggested subject for each card is in the comment above it.
+
+# Data-Engineering-Projects  —  Rows of servers in a data centre
+data-engineering-projects.jpg	
+
+# Webellian-Project  —  Retail store shelves stocked with product
+webellian-project.jpg	
+
+# Distributed-Systems  —  Dense network cabling in a server cluster
+distributed-systems.jpg	
+
+# smc_improvement_walkforward  —  Candlestick price chart on a trading screen
+smc-walkforward.jpg	
+
+# Quant-Project  —  Multi-monitor quantitative trading desk
+quant-project.jpg	
+
+# NiftyBot  —  Abstract neural network of glowing nodes
+niftybot.jpg	
+
+# smc_bot  —  Foreign exchange candlestick chart
+smc-bot.jpg	
+
+# smc_bot-other-files  —  Printed analytics reports and charts
+smc-bot-other-files.jpg	
+
+# Algotrading-MQL4  —  Stock exchange ticker board
+algotrading-mql4.jpg	
+
+# MetaTrader5_Python_AutomationBot  —  Laptop displaying live market charts
+metatrader5-bot.jpg	
+
+# Plant-Disease-Identification-Yolo  —  Close-up of a plant leaf showing disease lesions
+plant-disease-yolo.jpg	
+
+# Plant-Disease-Detection-ResNet-50-CNN  —  Macro photograph of a green plant leaf
+plant-disease-resnet.jpg	
+
+# Graphormer  —  Abstract graph of connected nodes and edges
+graphormer.jpg	
+
+# Graph-Neural-Networks  —  Network of glowing light trails
+graph-neural-networks.jpg	
+
+# ML-Regression-on-Experimental-Data  —  Laboratory measurement instruments
+ml-regression.jpg	
+
+# Hierarchical-RL-  —  Layered geometric architecture seen from below
+hierarchical-rl.jpg	
+
+# DQN  —  Retro arcade cabinets lit in a dark room
+dqn.jpg	
+
+# RLprojects  —  Stock market screens showing price movement
+rlprojects.jpg	
+
+# RL-Lab  —  Clean laboratory workbench
+rl-lab.jpg	
+
+# GrebNevRL  —  Abstract geometric pattern in motion
+grebnevrl.jpg	
